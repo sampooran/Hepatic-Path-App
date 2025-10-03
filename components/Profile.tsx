@@ -1,4 +1,5 @@
 
+
 import React, { useState, FormEvent, useRef } from 'react';
 import type { UserProfile } from '../types';
 import { EditIcon } from './icons/EditIcon';
@@ -46,16 +47,16 @@ export const Profile: React.FC<ProfileProps> = ({ userProfile, onProfileUpdate }
     };
 
     return (
-        <div className="max-w-4xl mx-auto bg-white p-8 rounded-2xl shadow-lg border border-slate-200">
+        <div className="max-w-4xl mx-auto bg-white dark:bg-slate-800 p-8 rounded-2xl shadow-lg border border-slate-200 dark:border-slate-700">
             <div className="flex justify-between items-start mb-8">
                 <div>
-                    <h2 className="text-3xl font-bold text-slate-800">My Profile</h2>
-                    <p className="text-slate-500">Manage your professional information.</p>
+                    <h2 className="text-3xl font-bold text-slate-800 dark:text-slate-100">My Profile</h2>
+                    <p className="text-slate-500 dark:text-slate-400">Manage your professional information.</p>
                 </div>
                 {!isEditing && (
                     <button
                         onClick={() => setIsEditing(true)}
-                        className="flex items-center px-4 py-2 text-sm font-medium text-slate-700 bg-white border border-slate-300 rounded-lg hover:bg-slate-50"
+                        className="flex items-center px-4 py-2 text-sm font-medium text-slate-700 bg-white border border-slate-300 rounded-lg hover:bg-slate-50 dark:bg-slate-700 dark:text-slate-200 dark:border-slate-600 dark:hover:bg-slate-600"
                     >
                         <EditIcon className="w-5 h-5 mr-2" />
                         Edit Profile
@@ -66,7 +67,7 @@ export const Profile: React.FC<ProfileProps> = ({ userProfile, onProfileUpdate }
             <form onSubmit={handleSubmit}>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                     <div className="md:col-span-1 flex flex-col items-center">
-                        <img src={formData.avatar} alt="Profile Avatar" className="w-32 h-32 rounded-full object-cover mb-4 border-4 border-slate-200" />
+                        <img src={formData.avatar} alt="Profile Avatar" className="w-32 h-32 rounded-full object-cover mb-4 border-4 border-slate-200 dark:border-slate-600" />
                         {isEditing && (
                              <>
                                 <input 
@@ -79,7 +80,7 @@ export const Profile: React.FC<ProfileProps> = ({ userProfile, onProfileUpdate }
                                 <button
                                     type="button"
                                     onClick={() => fileInputRef.current?.click()}
-                                    className="text-sm font-medium text-sky-600 hover:text-sky-800"
+                                    className="text-sm font-medium text-sky-600 hover:text-sky-800 dark:text-sky-400 dark:hover:text-sky-300"
                                 >
                                     Change Picture
                                 </button>
@@ -103,7 +104,7 @@ export const Profile: React.FC<ProfileProps> = ({ userProfile, onProfileUpdate }
                                 setIsEditing(false);
                                 setFormData(userProfile); // Reset changes
                             }}
-                            className="px-6 py-2 text-sm font-medium text-slate-700 bg-white border border-slate-300 rounded-lg hover:bg-slate-50"
+                            className="px-6 py-2 text-sm font-medium text-slate-700 bg-white border border-slate-300 rounded-lg hover:bg-slate-50 dark:bg-slate-700 dark:text-slate-200 dark:border-slate-600 dark:hover:bg-slate-600"
                         >
                             Cancel
                         </button>
@@ -133,7 +134,7 @@ const ProfileField: React.FC<ProfileFieldProps> = ({ icon, label, name, value, i
     <div className="flex items-start">
         <div className="mr-4 mt-1">{icon}</div>
         <div className="flex-grow">
-            <label htmlFor={name} className="block text-sm font-medium text-slate-500">{label}</label>
+            <label htmlFor={name} className="block text-sm font-medium text-slate-500 dark:text-slate-400">{label}</label>
             {isEditing ? (
                 <input
                     type="text"
@@ -141,10 +142,10 @@ const ProfileField: React.FC<ProfileFieldProps> = ({ icon, label, name, value, i
                     name={name}
                     value={value}
                     onChange={onChange}
-                    className="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md shadow-sm placeholder-slate-400 focus:outline-none focus:ring-sky-500 focus:border-sky-500"
+                    className="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md shadow-sm placeholder-slate-400 focus:outline-none focus:ring-sky-500 focus:border-sky-500 dark:bg-slate-700 dark:border-slate-600 dark:text-slate-100"
                 />
             ) : (
-                <p className="text-slate-800 text-lg">{value}</p>
+                <p className="text-slate-800 dark:text-slate-100 text-lg">{value}</p>
             )}
         </div>
     </div>

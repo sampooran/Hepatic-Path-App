@@ -1,4 +1,5 @@
 
+
 import React, { useRef, useState } from 'react';
 
 interface ImageUploaderProps {
@@ -55,14 +56,14 @@ export const ImageUploader: React.FC<ImageUploaderProps> = ({ onImageUpload, ima
                     <img src={imageUrl} alt="Slide Preview" className="max-w-full max-h-96 mx-auto rounded-lg shadow-md" />
                      <button
                         onClick={() => fileInputRef.current?.click()}
-                        className="mt-4 text-sm text-sky-600 hover:text-sky-800 font-medium"
+                        className="mt-4 text-sm text-sky-600 hover:text-sky-800 dark:text-sky-400 dark:hover:text-sky-300 font-medium"
                     >
                         Or select a different image
                     </button>
                 </div>
             ) : (
                 <div
-                    className={`border-2 border-dashed rounded-lg p-12 text-center cursor-pointer transition-colors duration-300 ${isDragging ? 'border-sky-500 bg-sky-50' : 'border-slate-300 hover:border-sky-400'}`}
+                    className={`border-2 border-dashed rounded-lg p-12 text-center cursor-pointer transition-colors duration-300 ${isDragging ? 'border-sky-500 bg-sky-50 dark:bg-sky-900/50' : 'border-slate-300 hover:border-sky-400 dark:border-slate-600 dark:hover:border-sky-500'}`}
                     onClick={() => fileInputRef.current?.click()}
                     onDrop={handleDrop}
                     onDragOver={handleDragOver}
@@ -76,7 +77,7 @@ export const ImageUploader: React.FC<ImageUploaderProps> = ({ onImageUpload, ima
                         className="hidden"
                         accept="image/png, image/jpeg, image/webp"
                     />
-                    <div className="flex flex-col items-center justify-center text-slate-500">
+                    <div className="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400">
                         <UploadIcon className="w-12 h-12 mb-4" />
                         <p className="font-semibold">Click to upload or drag and drop</p>
                         <p className="text-sm">PNG, JPG, or WEBP</p>

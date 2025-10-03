@@ -1,4 +1,7 @@
+
 import { Type } from '@google/genai';
+
+export type Theme = 'light' | 'dark' | 'system';
 
 export interface UserProfile {
     email: string;

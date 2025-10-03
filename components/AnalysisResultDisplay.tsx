@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import type { AnalysisResult, UserProfile, AnalysisHistoryItem } from '../types';
 import { DocumentTextIcon } from './icons/DocumentTextIcon';
@@ -32,14 +33,14 @@ interface SectionProps {
 }
 
 const Section: React.FC<SectionProps> = ({ icon, title, children }) => (
-    <div className="bg-white p-6 rounded-xl shadow-lg border border-slate-200 mb-6">
+    <div className="bg-white dark:bg-slate-800/50 p-6 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700 mb-6">
         <div className="flex items-center mb-4">
-            <div className="bg-sky-100 text-sky-600 rounded-full p-2 mr-4">
+            <div className="bg-sky-100 text-sky-600 dark:bg-sky-900/70 dark:text-sky-400 rounded-full p-2 mr-4">
                 {icon}
             </div>
-            <h3 className="text-xl font-bold text-slate-700">{title}</h3>
+            <h3 className="text-xl font-bold text-slate-700 dark:text-slate-200">{title}</h3>
         </div>
-        <div className="pl-12 text-slate-600 space-y-3 prose max-w-none">
+        <div className="pl-12 text-slate-600 dark:text-slate-300 space-y-3 prose dark:prose-invert max-w-none">
             {children}
         </div>
     </div>
@@ -88,7 +89,10 @@ export const AnalysisResultDisplay: React.FC<AnalysisResultDisplayProps> = ({ an
         const reportElement = document.getElementById('analysis-report');
         if (reportElement) {
             const { jsPDF } = window.jspdf;
-            const canvas = await html2canvas(reportElement, { scale: 2 });
+            const canvas = await html2canvas(reportElement, { 
+                scale: 2,
+                backgroundColor: document.documentElement.classList.contains('dark') ? '#1e293b' : '#ffffff' // Use theme background
+            });
             const imgData = canvas.toDataURL('image/png');
             const pdf = new jsPDF('p', 'mm', 'a4');
             const pdfWidth = pdf.internal.pageSize.getWidth();
@@ -143,6 +147,8 @@ export const AnalysisResultDisplay: React.FC<AnalysisResultDisplayProps> = ({ an
         updatedRecommendations[index] = value;
         handleFieldChange('recommendations', updatedRecommendations);
     };
+    
+    const inputStyles = "w-full p-2 border border-slate-300 rounded-md focus:ring-sky-500 focus:border-sky-500 bg-white dark:bg-slate-700 dark:border-slate-600 dark:text-slate-100";
 
     return (
         <div className="mt-8 relative">
@@ -156,13 +162,13 @@ export const AnalysisResultDisplay: React.FC<AnalysisResultDisplayProps> = ({ an
                 </div>
             )}
             <div className="flex justify-between items-center mb-6">
-                 <h2 className="text-3xl font-extrabold text-slate-800">Pathology Analysis Report</h2>
+                 <h2 className="text-3xl font-extrabold text-slate-800 dark:text-slate-100">Pathology Analysis Report</h2>
                  <div className="flex space-x-2">
                     {isEditing ? (
                         <>
                              <button
                                  onClick={handleCancel}
-                                 className="flex items-center px-4 py-2 text-sm font-medium text-slate-700 bg-white border border-slate-300 rounded-lg hover:bg-slate-50"
+                                 className="flex items-center px-4 py-2 text-sm font-medium text-slate-700 bg-white border border-slate-300 rounded-lg hover:bg-slate-50 dark:bg-slate-700 dark:text-slate-200 dark:border-slate-600 dark:hover:bg-slate-600"
                                  disabled={isSaving}
                              >
                                 <XCircleIcon className="w-5 h-5 mr-2" />
@@ -175,7 +181,7 @@ export const AnalysisResultDisplay: React.FC<AnalysisResultDisplayProps> = ({ an
                             >
                                 {isSaving ? (
                                     <>
-                                        <Spinner />
+                                        <Spinner className="text-white mr-2" />
                                         <span>Saving...</span>
                                     </>
                                 ) : (
@@ -188,11 +194,11 @@ export const AnalysisResultDisplay: React.FC<AnalysisResultDisplayProps> = ({ an
                         </>
                     ) : (
                         <>
-                            <button onClick={() => setIsEditing(true)} className="flex items-center px-4 py-2 text-sm font-medium text-slate-700 bg-white border border-slate-300 rounded-lg hover:bg-slate-50">
+                            <button onClick={() => setIsEditing(true)} className="flex items-center px-4 py-2 text-sm font-medium text-slate-700 bg-white border border-slate-300 rounded-lg hover:bg-slate-50 dark:bg-slate-700 dark:text-slate-200 dark:border-slate-600 dark:hover:bg-slate-600">
                                 <EditIcon className="w-5 h-5 mr-2" />
                                 Edit Report
                             </button>
-                             <button onClick={handleShare} className="flex items-center px-4 py-2 text-sm font-medium text-slate-700 bg-white border border-slate-300 rounded-lg hover:bg-slate-50 disabled:opacity-50">
+                             <button onClick={handleShare} className="flex items-center px-4 py-2 text-sm font-medium text-slate-700 bg-white border border-slate-300 rounded-lg hover:bg-slate-50 dark:bg-slate-700 dark:text-slate-200 dark:border-slate-600 dark:hover:bg-slate-600 disabled:opacity-50">
                                 <ShareIcon className="w-5 h-5 mr-2" />
                                 {isCopying ? 'Copied!' : 'Copy'}
                             </button>
@@ -205,20 +211,20 @@ export const AnalysisResultDisplay: React.FC<AnalysisResultDisplayProps> = ({ an
                  </div>
             </div>
             
-            <div id="analysis-report" className="p-8 bg-white rounded-lg border border-slate-200 shadow-sm">
-                <div className="flex items-center pb-4 mb-6 border-b border-slate-200">
-                    <img src={userProfile.avatar} alt="Doctor's Avatar" className="w-16 h-16 rounded-full object-cover mr-6 border-2 border-slate-200" />
+            <div id="analysis-report" className="p-8 bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 shadow-sm">
+                <div className="flex items-center pb-4 mb-6 border-b border-slate-200 dark:border-slate-700">
+                    <img src={userProfile.avatar} alt="Doctor's Avatar" className="w-16 h-16 rounded-full object-cover mr-6 border-2 border-slate-200 dark:border-slate-600" />
                     <div>
-                        <p className="text-sm text-slate-500">Report prepared by:</p>
-                        <p className="font-bold text-slate-800 text-lg">{userProfile.name}, {userProfile.qualifications}</p>
-                        <p className="text-slate-600">{userProfile.title}</p>
-                        <p className="text-slate-600">{userProfile.hospital}</p>
+                        <p className="text-sm text-slate-500 dark:text-slate-400">Report prepared by:</p>
+                        <p className="font-bold text-slate-800 dark:text-slate-100 text-lg">{userProfile.name}, {userProfile.qualifications}</p>
+                        <p className="text-slate-600 dark:text-slate-300">{userProfile.title}</p>
+                        <p className="text-slate-600 dark:text-slate-300">{userProfile.hospital}</p>
                     </div>
                 </div>
                 
                 <Section icon={<DocumentTextIcon className="w-6 h-6" />} title="Overall Impression">
                     {isEditing ? (
-                        <textarea value={editableResult.overallImpression} onChange={(e) => handleFieldChange('overallImpression', e.target.value)} className="w-full p-2 border border-slate-300 rounded-md focus:ring-sky-500 focus:border-sky-500" rows={4}/>
+                        <textarea value={editableResult.overallImpression} onChange={(e) => handleFieldChange('overallImpression', e.target.value)} className={inputStyles} rows={4}/>
                     ) : (
                         <p>{editableResult.overallImpression}</p>
                     )}
@@ -230,12 +236,12 @@ export const AnalysisResultDisplay: React.FC<AnalysisResultDisplayProps> = ({ an
                             <li key={index}>
                                 {isEditing ? (
                                     <div className='space-y-2'>
-                                         <input type="text" value={finding.finding} onChange={(e) => handleFindingChange(index, 'finding', e.target.value)} className="w-full p-2 border font-semibold text-slate-800 border-slate-300 rounded-md focus:ring-sky-500 focus:border-sky-500"/>
-                                         <textarea value={finding.description} onChange={(e) => handleFindingChange(index, 'description', e.target.value)} className="w-full p-2 border border-slate-300 rounded-md focus:ring-sky-500 focus:border-sky-500" rows={3}/>
+                                         <input type="text" value={finding.finding} onChange={(e) => handleFindingChange(index, 'finding', e.target.value)} className={`${inputStyles} font-semibold text-slate-800 dark:text-slate-100`}/>
+                                         <textarea value={finding.description} onChange={(e) => handleFindingChange(index, 'description', e.target.value)} className={inputStyles} rows={3}/>
                                     </div>
                                 ) : (
                                     <>
-                                        <p className="font-semibold text-slate-800">{finding.finding}</p>
+                                        <p className="font-semibold text-slate-800 dark:text-slate-100">{finding.finding}</p>
                                         <p>{finding.description}</p>
                                     </>
                                 )}
@@ -246,7 +252,7 @@ export const AnalysisResultDisplay: React.FC<AnalysisResultDisplayProps> = ({ an
 
                 <Section icon={<CheckCircleIcon className="w-6 h-6" />} title="Differential Diagnosis">
                      {isEditing ? (
-                        <textarea value={editableResult.differentialDiagnosis} onChange={(e) => handleFieldChange('differentialDiagnosis', e.target.value)} className="w-full p-2 border border-slate-300 rounded-md focus:ring-sky-500 focus:border-sky-500" rows={3}/>
+                        <textarea value={editableResult.differentialDiagnosis} onChange={(e) => handleFieldChange('differentialDiagnosis', e.target.value)} className={inputStyles} rows={3}/>
                     ) : (
                         <p>{editableResult.differentialDiagnosis}</p>
                     )}
@@ -257,7 +263,7 @@ export const AnalysisResultDisplay: React.FC<AnalysisResultDisplayProps> = ({ an
                         {editableResult.recommendations.map((rec, index) => (
                             <li key={index}>
                                 {isEditing ? (
-                                    <input type="text" value={rec} onChange={(e) => handleRecommendationChange(index, e.target.value)} className="w-full p-2 border border-slate-300 rounded-md focus:ring-sky-500 focus:border-sky-500"/>
+                                    <input type="text" value={rec} onChange={(e) => handleRecommendationChange(index, e.target.value)} className={inputStyles} />
                                 ) : (
                                     rec
                                 )}

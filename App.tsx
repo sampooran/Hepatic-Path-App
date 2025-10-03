@@ -1,3 +1,4 @@
+
 import React, { useState, useCallback, useEffect } from 'react';
 import { Header } from './components/Header';
 import { ImageUploader } from './components/ImageUploader';
@@ -8,7 +9,7 @@ import { Profile } from './components/Profile';
 import { AnalysisHistory } from './components/AnalysisHistory';
 import { analyzeLiverSlide } from './services/geminiService';
 import * as apiService from './services/apiService';
-import type { AnalysisResult, UserProfile, AnalysisHistoryItem } from './types';
+import type { AnalysisResult, UserProfile, AnalysisHistoryItem, Theme } from './types';
 import { XCircleIcon } from './components/icons/XCircleIcon';
 
 const App: React.FC = () => {
@@ -24,6 +25,27 @@ const App: React.FC = () => {
     
     const [analysisHistory, setAnalysisHistory] = useState<AnalysisHistoryItem[]>([]);
     const [isHistoryLoading, setIsHistoryLoading] = useState<boolean>(true);
+
+    const [theme, setTheme] = useState<Theme>(() => (localStorage.getItem('theme') as Theme) || 'system');
+
+    useEffect(() => {
+        const root = window.document.documentElement;
+        const isDark =
+            theme === 'dark' ||
+            (theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+        
+        root.classList.toggle('dark', isDark);
+        localStorage.setItem('theme', theme);
+
+        const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+        const handleChange = () => {
+            if (theme === 'system') {
+                root.classList.toggle('dark', mediaQuery.matches);
+            }
+        };
+        mediaQuery.addEventListener('change', handleChange);
+        return () => mediaQuery.removeEventListener('change', handleChange);
+    }, [theme]);
 
     useEffect(() => {
         const checkSession = async () => {
@@ -166,23 +188,23 @@ const App: React.FC = () => {
 
     if (!isLoggedIn || !userProfile) {
         return (
-            <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4">
+            <div className="min-h-screen bg-slate-50 dark:bg-slate-900 flex items-center justify-center p-4">
                 <Auth onLogin={handleLogin} onSignUp={handleSignUp} />
             </div>
         )
     }
 
     return (
-        <div className="min-h-screen bg-slate-50 text-slate-800">
-            <Header userProfile={userProfile} onLogout={handleLogout} setView={setCurrentView} />
+        <div className="min-h-screen bg-slate-50 text-slate-800 dark:bg-slate-900 dark:text-slate-200">
+            <Header userProfile={userProfile} onLogout={handleLogout} setView={setCurrentView} theme={theme} setTheme={setTheme} />
             <main className="container mx-auto p-4 md:p-8">
                 {currentView === 'analyzer' && (
                     <div className="max-w-4xl mx-auto">
-                        <p className="text-center text-slate-600 mb-8 text-lg">
+                        <p className="text-center text-slate-600 dark:text-slate-400 mb-8 text-lg">
                             Upload a liver tissue slide image to receive an AI-powered pathological analysis.
                         </p>
 
-                        <div className="bg-white p-6 rounded-2xl shadow-lg border border-slate-200 mb-8">
+                        <div className="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-lg border border-slate-200 dark:border-slate-700 mb-8">
                             <ImageUploader onImageUpload={handleImageUpload} imageUrl={imageUrl} />
                             {imageUrl && (
                                 <div className="mt-6 flex justify-center items-center space-x-4">
@@ -192,13 +214,13 @@ const App: React.FC = () => {
                                             disabled={isLoading}
                                             className="px-8 py-3 bg-sky-600 text-white font-semibold rounded-lg shadow-md hover:bg-sky-700 disabled:bg-slate-400 disabled:cursor-not-allowed transition-all duration-300 ease-in-out transform hover:scale-105 flex items-center"
                                         >
-                                            {isLoading && <Spinner />}
+                                            {isLoading && <Spinner className="-ml-1 mr-3 text-white" />}
                                             {isLoading ? 'Analyzing...' : 'Analyze Slide'}
                                         </button>
                                     )}
                                      <button
                                         onClick={handleClearAnalysis}
-                                        className="px-8 py-3 bg-white text-slate-700 font-semibold rounded-lg shadow-md hover:bg-slate-100 border border-slate-300 transition-all duration-300 ease-in-out transform hover:scale-105 flex items-center"
+                                        className="px-8 py-3 bg-white dark:bg-slate-700 dark:text-slate-200 dark:border-slate-600 dark:hover:bg-slate-600 text-slate-700 font-semibold rounded-lg shadow-md hover:bg-slate-100 border border-slate-300 transition-all duration-300 ease-in-out transform hover:scale-105 flex items-center"
                                     >
                                         <XCircleIcon className="w-5 h-5 mr-2" />
                                         Clear
