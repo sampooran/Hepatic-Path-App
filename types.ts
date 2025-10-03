@@ -1,5 +1,17 @@
-
 import { Type } from '@google/genai';
+
+export interface UserProfile {
+    email: string;
+    name: string;
+    title: string;
+    hospital: string;
+    qualifications: string;
+    avatar: string; // base64 data URL
+}
+
+export interface StoredUser extends UserProfile {
+    password: string;
+}
 
 export interface AnalysisResult {
     overallImpression: string;
@@ -7,8 +19,15 @@ export interface AnalysisResult {
         finding: string; 
         description: string; 
     }[];
-    potentialDiagnosis: string;
+    differentialDiagnosis: string;
     recommendations: string[];
+}
+
+export interface AnalysisHistoryItem {
+    id: string;
+    date: string;
+    imageUrl: string; // base64 data URL
+    result: AnalysisResult;
 }
 
 export const analysisSchema = {
@@ -36,9 +55,9 @@ export const analysisSchema = {
       },
       description: "A list of specific pathological features observed in the slide.",
     },
-    potentialDiagnosis: {
+    differentialDiagnosis: {
       type: Type.STRING,
-      description: "A potential diagnosis or a list of differential diagnoses based on the key findings. Correlate findings to possible conditions like NAFLD, NASH, alcoholic liver disease, or viral hepatitis.",
+      description: "A differential diagnosis or a list of potential diagnoses based on the key findings. Correlate findings to possible conditions like NAFLD, NASH, alcoholic liver disease, or viral hepatitis.",
     },
     recommendations: {
       type: Type.ARRAY,
@@ -46,5 +65,5 @@ export const analysisSchema = {
       description: "Recommendations for further tests, special stains (e.g., Trichrome, Reticulin), immunohistochemistry, or clinical correlation needed to confirm the diagnosis.",
     },
   },
-  required: ["overallImpression", "keyFindings", "potentialDiagnosis", "recommendations"],
+  required: ["overallImpression", "keyFindings", "differentialDiagnosis", "recommendations"],
 };

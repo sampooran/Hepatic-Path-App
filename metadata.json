@@ -1,5 +1,5 @@
 {
-  "name": "Copy of Liver Pathology Slide Analyzer",
+  "name": "Liver Pathology Slide Analyzer",
   "description": "An AI-powered application to analyze liver pathology slides. Upload an image of a liver tissue slide to receive a detailed pathological analysis, including key findings, potential diagnoses, and recommendations for further investigation.",
   "requestFramePermissions": []
 }

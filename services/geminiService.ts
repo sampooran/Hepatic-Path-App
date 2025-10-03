@@ -5,7 +5,7 @@ import { analysisSchema, AnalysisResult } from '../types';
 const PROMPT = `Please analyze the provided image of a liver tissue slide. Identify key pathological features and provide a structured report. Your analysis should include: 
 1. An overall impression. 
 2. A list of key findings (e.g., steatosis, inflammation, fibrosis, ballooning, Mallory-Denk bodies). 
-3. A potential diagnosis or differential diagnosis based on the findings. 
+3. A differential diagnosis based on the findings. 
 4. Recommendations for further tests or investigations.
 Provide your response in the requested JSON format.`;
 
